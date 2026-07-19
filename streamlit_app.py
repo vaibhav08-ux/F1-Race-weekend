@@ -108,7 +108,7 @@ with tab_overview:
     if weather_df.empty:
         st.info("No weather data for this meeting.")
     else:
-        weather_df["date"] = pd.to_datetime(weather_df["date"])
+        weather_df["date"] = pd.to_datetime(weather_df["date"], format="ISO8601")
         fig = px.line(
             weather_df, x="date", y=["air_temperature", "track_temperature"],
             labels={"value": "°C", "date": "", "variable": ""},
@@ -290,7 +290,7 @@ with tab_telemetry:
             lap_num = st.select_slider("Lap", options=lap_options)
             lap_row = laps_df[laps_df["lap_number"] == lap_num].iloc[0]
 
-            date_start = pd.to_datetime(lap_row["date_start"])
+            date_start = pd.to_datetime(lap_row["date_start"], format="ISO8601")
             duration = lap_row.get("lap_duration") or 90
             date_end = date_start + pd.to_timedelta(float(duration), unit="s")
 
@@ -314,7 +314,7 @@ with tab_telemetry:
             if car_df.empty:
                 st.info("No car telemetry for this lap.")
             else:
-                car_df["date"] = pd.to_datetime(car_df["date"])
+                car_df["date"] = pd.to_datetime(car_df["date"], format="ISO8601")
                 fig = make_subplots(
                     rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.06,
                     subplot_titles=("Speed (km/h)", "Throttle / Brake (%)", "RPM / Gear"),
